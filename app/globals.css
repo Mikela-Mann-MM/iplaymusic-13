@@ -59,8 +59,8 @@ h1, h2, h3, h4, h5, h6 {
   background: linear-gradient(to bottom right, rgb(255,17,104), rgb(229,64,40));
   padding: 2rem 1.5rem;
 }
-  
-  * Play Button */
+
+/* Play Button */
 .btn-play {
   width: 3rem;
   height: 3rem;
@@ -193,26 +193,36 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 
 
-**Hvornår lave custom classes:**
+Hvornår lave custom classes:
 
-1. **"Rule of 3"** - Copy-paster du samme classes 3+ gange?  
-   → Lav custom class i globals.css
+"Rule of 3" - Copy-paster du samme classes 3+ gange?  
+Lav custom class i globals.css
 
-2. **Komplekse states** - Mange hover/active/focus/dark variants?  
-   → Lav custom class (nemmere at vedligeholde)
+Komplekse states- Mange hover/active/focus/dark variants?  
+Lav custom class (nemmere at vedligeholde)
 
-3. **Animationer** - Custom @keyframes?  
-   → Altid i globals.css (kan ikke laves inline)
+Animationer - Custom @keyframes?  
+Altid i globals.css (kan ikke laves inline)
 
-**Moderne approach:**
-- Små projekter: Inline Tailwind + få custom classes
-- Store projekter: Component library (shadcn/ui style)
+Moderne approach:
+Små projekter: Inline Tailwind + få custom classes
+Store projekter: Component library (shadcn/ui style)
 
-**Hold globals.css minimal:**
-- Animationer (@keyframes)
-- Ting brugt 10+ steder
-- Komplekse multi-state patterns
+Hold globals.css minimal:
+Lav custom class (nemmere at vedligeholde)
 
-**Red flag:** Abstraherer du før du ser mønsteret? → Vent! 
+Animationer - Custom @keyframes?  
+Altid i globals.css (kan ikke laves inline)
+
+Moderne approach:
+Små projekter: Inline Tailwind + få custom classes
+Store projekter: Component library (shadcn/ui style)
+
+Hold globals.css minimal:
+Animationer (@keyframes)
+Ting brugt 10+ steder
+Komplekse multi-state patterns
+
+Red flag: Abstraherer du før du ser mønsteret? → Vent! 
 
 */
