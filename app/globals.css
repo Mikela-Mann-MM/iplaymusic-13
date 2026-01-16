@@ -1,2 +1,218 @@
+
+
 @import "tailwindcss";
 
+/* Root Variables */
+:root {
+  --primary-pink: rgb(255,17,104);
+  --primary-orange: rgb(229,64,40);
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-inter), system-ui, sans-serif;
+  color: rgb(17,22,37);
+  background-color: rgb(255,255,255);
+}
+
+body.dark {
+  color: rgb(255,255,255);
+  background-color: rgb(17,22,37);
+}
+
+/* Scrollbar Styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-poppins), system-ui, sans-serif;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(to right, rgb(255,17,104), rgb(229,64,40));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Page Header with Gradient */
+.page-header {
+  background: linear-gradient(to bottom right, rgb(255,17,104), rgb(229,64,40));
+  padding: 2rem 1.5rem;
+}
+  
+  * Play Button */
+.btn-play {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+  background: linear-gradient(to bottom right, rgb(255,17,104), rgb(229,64,40));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.2s;
+}
+
+.btn-play:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  transform: scale(1.05);
+}
+
+.btn-play:active {
+  transform: scale(0.95);
+}
+
+/* Secondary Button (Outline) */
+.btn-secondary {
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  border: 2px solid rgb(17,22,37);
+  color: rgb(17,22,37);
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: all 0.2s;
+}
+
+.dark .btn-secondary {
+  border-color: white;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: rgb(17,22,37);
+  color: white;
+}
+
+.dark .btn-secondary:hover {
+  background-color: white;
+  color: rgb(17,22,37);
+}
+
+/* Track Item */
+.track-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.track-item:hover {
+  background-color: rgb(249 250 251);
+}
+
+.dark .track-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Input with Underline */
+.input-underline {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: transparent;
+  border-bottom: 2px solid rgb(209 213 219);
+  outline: none;
+  color: rgb(17,22,37);
+  transition: border-color 0.2s;
+}
+
+.dark .input-underline {
+  border-bottom-color: rgb(75 85 99);
+  color: white;
+}
+
+.input-underline:focus {
+  border-bottom-color: rgb(255,17,104);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+/* Vinyl Spin Animation */
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Pulse Animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* 
+
+**Hvornår lave custom classes:**
+
+1. **"Rule of 3"** - Copy-paster du samme classes 3+ gange?  
+   → Lav custom class i globals.css
+
+2. **Komplekse states** - Mange hover/active/focus/dark variants?  
+   → Lav custom class (nemmere at vedligeholde)
+
+3. **Animationer** - Custom @keyframes?  
+   → Altid i globals.css (kan ikke laves inline)
+
+**Moderne approach:**
+- Små projekter: Inline Tailwind + få custom classes
+- Store projekter: Component library (shadcn/ui style)
+
+**Hold globals.css minimal:**
+- Animationer (@keyframes)
+- Ting brugt 10+ steder
+- Komplekse multi-state patterns
+
+**Red flag:** Abstraherer du før du ser mønsteret? → Vent! 
+
+*/
