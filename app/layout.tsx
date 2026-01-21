@@ -4,6 +4,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Poppins, Inter } from 'next/font/google'
 
+import Navbar from "@/components/navigation/Navbar";
+import Sidebar from "@/components/navigation/Sidebar";
+
 
 // Font configurations
 const poppins = Poppins({ 
@@ -35,7 +38,13 @@ export default function RootLayout({children}: Readonly<{
   return ( 
     <html lang="en" className={`${poppins.variable} ${inter.variable}`}> 
       <body className="antialiased">
-        {children}
+        <Navbar />
+        <div className="flex pt-16">
+          <Sidebar />
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

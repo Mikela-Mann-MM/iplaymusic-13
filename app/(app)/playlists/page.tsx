@@ -1,73 +1,135 @@
+'use client';
 
-
-'use client'
-
-import { ArrowLeft, Search, Play } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { mockData } from '@/lib/mockData'
-import BottomNav from '@/components/navigation/BottomNav'
+import { ArrowLeft, Search, Play } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { mockPlaylists } from '@/lib/mockData';
+import { 
+  getTrackArtist, 
+  formatDuration, 
+  getPlaylistTracks,
+  getPlaylistImage 
+} from '@/lib/spotify-helpers';
+import BottomNav from '@/components/navigation/BottomNav';
 
 export default function PlaylistsPage() {
-  const router = useRouter()
-  const tracks = mockData.getPlaylistTracks('p1')
-  const playlist = mockData.playlists[0]
+  const router = useRouter();
+  
+  // Get first playlist (or you can use a specific ID)
+  const playlist = mockPlaylists[0];
+  
+  // Get tracks from playlist
+  const tracks = getPlaylistTracks(playlist);
 
   return (
     <div className="min-h-screen bg-white dark:bg-background-dark pb-32">
+      {/* Header */}
       <header className="page-header flex items-center justify-between">
-        <button onClick={() => router.back()} className="p-2 text-white">
+        <button 
+          onClick={() => router.back()} 
+          className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+        >
           <ArrowLeft size={24} />
         </button>
-        <h2 className="text-white font-semibold">PLAYLISTS</h2>
-        <button className="p-2 text-white">
+        <h2 className="text-white font-semibold tracking-wider">PLAYLISTS</h2>
+        <button 
+          onClick={() => router.push('/search')}
+          className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
+        >
           <Search size={24} />
         </button>
       </header>
 
       <div className="px-4 -mt-16">
+        {/* Title */}
         <h1 className="text-display font-extrabold text-white mb-8">
           Playlists
         </h1>
 
+        {/* Playlist Cover */}
         <div className="flex justify-center mb-8">
           <div className="text-center">
-            <div className="w-64 h-64 bg-linear-to-br from-purple-600 to-purple-900 rounded-album mb-4 overflow-hidden flex items-center justify-center">
-              <span className="text-6xl text-white font-bold">
-                {playlist.name[0]}
-              </span>
-            </div>
+            {/* Album Art or Initial */}
+            {getPlaylistImage(playlist) ? (
+              <div className="w-64 h-64 rounded-lg mb-4 overflow-hidden shadow-2xl">
+                <img 
+                  src={getPlaylistImage(playlist)} 
+                  alt={playlist.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div className="w-64 h-64 bg-linear-to-br from-purple-600 to-purple-900 rounded-lg mb-4 overflow-hidden flex items-center justify-center shadow-2xl">
+                <span className="text-6xl text-white font-bold">
+                  {playlist.name[0]}
+                </span>
+              </div>
+            )}
+            
+            {/* Playlist Name (split into lines if long) */}
             <h2 className="text-heading-1 font-bold mb-1 dark:text-white">
               {playlist.name.split(' ')[0]} {playlist.name.split(' ')[1]}
             </h2>
-            <p className="text-heading-1 font-bold dark:text-white">
-              {playlist.name.split(' ').slice(2).join(' ')}
+            {playlist.name.split(' ').length > 2 && (
+              <p className="text-heading-1 font-bold dark:text-white">
+                {playlist.name.split(' ').slice(2).join(' ')}
+              </p>
+            )}
+            
+            {/* Track count */}
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+              {playlist.tracks.total} songs
             </p>
           </div>
         </div>
 
+        {/* Track List */}
         <div className="space-y-1 mb-8">
-          {tracks.map((track) => (
-            <div key={track.id} className="track-item" onClick={() => router.push('/player')}>
-              <button className="btn-play shrink-0">
-                <Play size={20} fill="currentColor" />
-              </button>
-              <div className="flex-1 min-w-0">
-                <h3 className="text-body font-medium truncate dark:text-white">
-                  {track.name}
-                </h3>
-                <p className="text-body text-text-secondary-light dark:text-text-secondary-dark truncate">
-                  {track.artists[0].name}
-                </p>
+          {tracks.length > 0 ? (
+            tracks.map((track, index) => (
+              <div 
+                key={track.id} 
+                className="track-item" 
+                onClick={() => router.push('/player')}
+              >
+                {/* Track Number */}
+                <span className="text-gray-500 dark:text-gray-400 w-8 text-center shrink-0">
+                  {index + 1}
+                </span>
+                
+                {/* Play Button */}
+                <button className="btn-play shrink-0">
+                  <Play size={20} fill="currentColor" />
+                </button>
+                
+                {/* Track Info */}
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-body font-medium truncate dark:text-white">
+                    {track.name}
+                  </h3>
+                  <p className="text-body text-text-secondary-light dark:text-text-secondary-dark truncate">
+                    {getTrackArtist(track)}
+                  </p>
+                </div>
+                
+                {/* Duration */}
+                <span className="text-caption text-text-muted-light dark:text-text-muted-dark shrink-0">
+                  {formatDuration(track.duration_ms)}
+                </span>
               </div>
-              <span className="text-caption text-text-muted-light dark:text-text-muted-dark shrink-0">
-                {Math.floor(track.duration_ms / 60000)}:{((track.duration_ms % 60000) / 1000).toFixed(0).padStart(2, '0')}
-              </span>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400 py-8">
+              No tracks in this playlist
+            </p>
+          )}
         </div>
 
+        {/* Listen All Button */}
         <div className="flex justify-center pb-8">
-          <button className="btn-secondary w-full max-w-md">
+          <button 
+            className="btn-secondary w-full max-w-md"
+            onClick={() => router.push('/player')}
+          >
             LISTEN ALL
           </button>
         </div>
@@ -75,5 +137,5 @@ export default function PlaylistsPage() {
 
       <BottomNav />
     </div>
-  )
+  );
 }
