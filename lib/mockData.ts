@@ -1,5 +1,3 @@
-
-
 // lib/mockData.ts
 import { SpotifyTrack, SpotifyAlbum, SpotifyArtist, SpotifyPlaylist, SpotifyCategory } from '@/types/spotify'
 
