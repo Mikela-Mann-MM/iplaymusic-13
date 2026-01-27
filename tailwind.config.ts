@@ -1,5 +1,3 @@
-
-
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -19,6 +17,7 @@ const config: Config = {
         // Background Colors
         'background-light': 'rgb(255,255,255)',
         'background-dark': 'rgb(17,22,37)',
+        'splash-dark': 'rgb(52,25,49)',
         
         // Text Colors
         'text-primary-light': 'rgb(17,22,37)',
@@ -43,25 +42,24 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
         heading: ['var(--font-poppins)', 'system-ui', 'sans-serif'],
-        },
+      },
 
-        fontSize: {
+      fontSize: {
         // DISPLAY / HEADINGS (Poppins Bold)
         'display': ['3rem', { lineHeight: '1.1' }],        // 48px
         'h1': ['2.25rem', { lineHeight: '1.2' }],          // 36px
         'h2': ['2rem', { lineHeight: '1.25' }],            // 32px
-        'h3': ['1.5rem', { lineHeight: '1.3' }],            // 24px
-        'h4': ['1.25rem', { lineHeight: '1.35' }],          // 20px
+        'h3': ['1.5rem', { lineHeight: '1.3' }],           // 24px
+        'h4': ['1.25rem', { lineHeight: '1.35' }],         // 20px
 
         // BODY
-        'body': ['0.9375rem', { lineHeight: '1.6' }],       // 15px
-        'body-bold': ['0.9375rem', { lineHeight: '1.6' }],  // 15px bold
+        'body': ['0.9375rem', { lineHeight: '1.6' }],      // 15px
+        'body-bold': ['0.9375rem', { lineHeight: '1.6' }], // 15px bold
 
         // SMALL TEXT
-        'caption': ['0.75rem', { lineHeight: '1.4' }],      // 12px
-        'micro': ['0.625rem', { lineHeight: '1.4' }],       // 10px
-        },
-
+        'caption': ['0.75rem', { lineHeight: '1.4' }],     // 12px
+        'micro': ['0.625rem', { lineHeight: '1.4' }],      // 10px
+      },
       
       borderRadius: {
         'album': '1.5rem',
@@ -69,6 +67,11 @@ const config: Config = {
       
       boxShadow: {
         'card': '0 4px 20px rgba(0, 0, 0, 0.1)',
+      },
+
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },

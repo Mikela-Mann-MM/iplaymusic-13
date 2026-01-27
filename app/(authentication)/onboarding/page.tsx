@@ -1,107 +1,98 @@
-
-
 'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Radio, Heart, Music } from 'lucide-react'
+import { Music, Headphones, Heart, ChevronRight } from 'lucide-react'
+import Cookies from 'js-cookie'
 
-const slides = [
-  {
-    icon: Radio,
-    title: "Where Words Fail,",
-    title2: "Music Speaks",
-    bg: "from-purple-500 to-pink-500"
-  },
-  {
-    icon: Heart,
-    title: "No Music",
-    title2: "No Life",
-    bg: "from-pink-500 to-orange-500"
-  },
-  {
-    icon: Music,
-    title: "Peace.Love",
-    title2: "Music",
-    bg: "from-orange-500 to-yellow-500"
-  }
-]
-
-export default function Onboarding() {
+export default function OnboardingPage() {
   const router = useRouter()
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentStep, setCurrentStep] = useState(0)
+
+  const steps = [
+    {
+      icon: Music,
+      title: "Welcome to iPlayMusic",
+      description: "Your personal music streaming experience starts here"
+    },
+    {
+      icon: Headphones,
+      title: "Discover New Music",
+      description: "Explore millions of songs and create your perfect playlist"
+    },
+    {
+      icon: Heart,
+      title: "Save Your Favorites",
+      description: "Build your library and never lose track of songs you love"
+    }
+  ]
 
   const handleNext = () => {
-    if (currentSlide < slides.length - 1) {
-      setCurrentSlide(currentSlide + 1)
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1)
     } else {
-      router.push('/player')
+      // Onboarding færdig
+      Cookies.set('hasCompletedOnboarding', 'true', { expires: 365 })
+      router.push('/home')
     }
   }
 
   const handleSkip = () => {
-    router.push('/player')
+    Cookies.set('hasCompletedOnboarding', 'true', { expires: 365 })
+    router.push('/home')
   }
 
-  const slide = slides[currentSlide]
-  const Icon = slide.icon
+  const CurrentIcon = steps[currentStep].icon
 
   return (
-    <div className={`min-h-screen bg-linear-to-br ${slide.bg} dark:bg-linear-to-br dark:${slide.bg} flex flex-col items-center justify-between p-8 transition-all duration-500`}>
-      {/* Skip Button */}
-      <div className="w-full flex justify-end">
-        <button
-          onClick={handleSkip}
-          className="text-white font-semibold text-lg hover:underline"
-        >
-          SKIP
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="flex-1 flex flex-col items-center justify-center text-center animate-slide-up">
-        {/* Icon */}
-        <div className="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-12">
-          <Icon className="text-white" size={64} />
+    <div className="min-h-screen bg-linear-to-br from-primary-pink to-primary-orange flex items-center justify-center p-6">
+      <div className="w-full max-w-md">
+        <div className="flex justify-end mb-8">
+          <button
+            onClick={handleSkip}
+            className="text-white/80 hover:text-white transition-colors text-sm font-medium"
+          >
+            Skip
+          </button>
         </div>
 
-        {/* Title */}
-        <h1 className="text-5xl font-extrabold text-white leading-tight">
-          {slide.title}
-          <br />
-          {slide.title2}
-        </h1>
-      </div>
+        <div className="text-center text-white space-y-8">
+          <div className="flex justify-center">
+            <div className="w-32 h-32 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+              <CurrentIcon size={64} className="text-white" />
+            </div>
+          </div>
 
-      {/* Indicators & Next */}
-      <div className="w-full">
-        {/* Indicators */}
-        <div className="flex justify-center gap-3 mb-8">
-          {slides.map((_, index) => {
-            const IconComponent = slides[index].icon
-            return (
-              <button
+          <div className="space-y-4">
+            <h2 className="text-3xl font-bold">
+              {steps[currentStep].title}
+            </h2>
+            <p className="text-white/80 text-lg">
+              {steps[currentStep].description}
+            </p>
+          </div>
+
+          <div className="flex justify-center space-x-2">
+            {steps.map((_, index) => (
+              <div
                 key={index}
-                onClick={() => setCurrentSlide(index)}
-                className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-                  index === currentSlide
-                    ? 'bg-white text-gray-900 scale-110'
-                    : 'bg-white/30 text-white'
+                className={`h-2 rounded-full transition-all ${
+                  index === currentStep 
+                    ? 'w-8 bg-white' 
+                    : 'w-2 bg-white/40'
                 }`}
-              >
-                <IconComponent size={24} />
-              </button>
-            )
-          })}
-        </div>
+              />
+            ))}
+          </div>
 
-        {/* Next Button */}
-        <button
-          onClick={handleNext}
-          className="w-full py-4 bg-white text-gray-900 rounded-full font-bold text-lg hover:shadow-xl transition-shadow"
-        >
-          {currentSlide < slides.length - 1 ? 'NEXT' : 'GET STARTED'}
-        </button>
+          <button
+            onClick={handleNext}
+            className="w-full py-4 bg-white text-primary-pink font-semibold text-lg rounded-full hover:bg-white/90 transition-all flex items-center justify-center space-x-2"
+          >
+            <span>{currentStep === steps.length - 1 ? "Get Started" : "Next"}</span>
+            <ChevronRight size={20} />
+          </button>
+        </div>
       </div>
     </div>
   )

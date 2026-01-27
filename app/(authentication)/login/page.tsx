@@ -1,113 +1,101 @@
-/* 
-const CLIENT_ID = process.env.CLIENT_ID;
-const REDIRECT_URI = process.env.REDIRECT_URI;
 
 
-export default function LoginPage() {
-  return (  
-    <a href={`
-        https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&show_dialog=true&scope=playlist-read-private`}>
-        Log in with Spotify
-    </a>
-  );
-}    */
-
-  'use client'
+'use client'
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { User, Lock, Fingerprint } from 'lucide-react'
-import Input from '@/components/ui/Input'
-import Button from '@/components/ui/Button'
+import Cookies from 'js-cookie'
 
-export default function Login() {
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
+const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+
+export default function LoginPage() {
   const router = useRouter()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const spotifyAuthUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&show_dialog=true&scope=playlist-read-private user-read-email user-read-private`;
+
   const handleLogin = () => {
-    // Simulate login
-    router.push('/onboarding')
+    // Når der klikkes på LOG IN knappen, gå til Spotify OAuth
+    window.location.href = spotifyAuthUrl;
   }
 
-  const handleBiometric = () => {
-    // Simulate biometric login
-    router.push('/onboarding')
+  const handleBiometricLogin = () => {
+    // Simuler biometric login (går også til Spotify)
+    window.location.href = spotifyAuthUrl;
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-linear-to-br dark:from-primary-pink dark:to-primary-orange flex items-center justify-center p-6">
-      <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-extrabold bg-linear-to-r from-primary-pink to-primary-orange bg-clip-text text-transparent mb-2">
-            iPlayMusic
-          </h1>
-          <p className="text-gray-600 dark:text-white/80">
-            Sign in to continue
-          </p>
-        </div>
+    <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col justify-between p-6">
+      <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
+        {/* Log In Header */}
+        <h1 className="text-5xl font-bold text-text-secondary-light dark:text-text-primary-dark mb-16">
+          Log In
+        </h1>
 
-        {/* Login Form */}
-        <div className="space-y-6">
-          {/* Username */}
+        {/* Username Field */}
+        <div className="mb-8">
+          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark mb-2 block">
+            Username
+          </label>
           <div className="relative">
-            <User className="absolute left-0 top-3 text-gray-400 dark:text-white/60" size={20} />
             <input
               type="text"
-              placeholder="Username"
+              placeholder="Enter you username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="input-underline pl-8"
+              className="w-full bg-transparent border-b-2 border-text-secondary-light dark:border-text-primary-dark py-3 pr-12 text-text-secondary-light dark:text-text-primary-dark placeholder-gray-400 focus:outline-none focus:border-primary-pink transition-colors"
+            />
+            <User 
+              className="absolute right-0 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-primary-dark" 
+              size={24} 
             />
           </div>
+        </div>
 
-          {/* Password */}
+        {/* Password Field */}
+        <div className="mb-12">
+          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark mb-2 block">
+            Password
+          </label>
           <div className="relative">
-            <Lock className="absolute left-0 top-3 text-gray-400 dark:text-white/60" size={20} />
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="input-underline pl-8"
+              className="w-full bg-transparent border-b-2 border-text-secondary-light dark:border-text-primary-dark py-3 pr-12 text-text-secondary-light dark:text-text-primary-dark placeholder-gray-400 focus:outline-none focus:border-primary-pink transition-colors"
+            />
+            <Lock 
+              className="absolute right-0 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-primary-dark" 
+              size={24} 
             />
           </div>
+        </div>
 
-          {/* Login Button */}
+        {/* Login Button */}
+        <button
+          onClick={handleLogin}
+          className="w-full py-4 border-2 border-text-secondary-light dark:border-text-primary-dark rounded-full text-text-secondary-light dark:text-text-primary-dark font-bold text-lg hover:bg-text-secondary-light hover:text-white dark:hover:bg-text-primary-dark dark:hover:text-background-dark transition-all mb-16"
+        >
+          LOG IN
+        </button>
+
+        {/* Biometric Login */}
+        <div className="text-center">
+          <p className="text-text-secondary-light dark:text-text-primary-dark mb-6">
+            One-Touch Login
+          </p>
           <button
-            onClick={handleLogin}
-            className="w-full py-4 border-2 border-gray-900 dark:border-white rounded-full text-gray-900 dark:text-white font-semibold text-lg hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-all"
+            onClick={handleBiometricLogin}
+            className="w-24 h-24 rounded-full bg-linear-to-br from-primary-pink to-primary-orange flex items-center justify-center mx-auto hover:shadow-2xl hover:scale-105 transition-all"
           >
-            LOG IN
+            <Fingerprint className="text-white" size={48} />
           </button>
-
-          {/* Divider */}
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300 dark:border-white/30"></div>
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-gray-50 dark:bg-transparent text-gray-500 dark:text-white/60">
-                or
-              </span>
-            </div>
-          </div>
-
-          {/* Biometric Login */}
-          <div className="text-center">
-            <p className="text-sm text-gray-600 dark:text-white/80 mb-4">
-              One-Touch Login
-            </p>
-            <button
-              onClick={handleBiometric}
-              className="w-20 h-20 rounded-full bg-linear-to-br from-primary-pink to-primary-orange flex items-center justify-center mx-auto hover:shadow-xl transition-shadow"
-            >
-              <Fingerprint className="text-white" size={40} />
-            </button>
-          </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

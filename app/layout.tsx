@@ -24,8 +24,8 @@ const inter = Inter({
 // Metadata for the application
 export const metadata = {
   title: {
-    template: "%s | IPlayMusic", //%s placeholder will be replaced by the page title defined in each page
-    default: "IPlayMusic"
+    template: "%s | iPlayMusic", //%s placeholder will be replaced by the page title defined in each page
+    default: "iPlayMusic"
   },
   description: "Stream and discover music",
 };
