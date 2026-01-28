@@ -9,6 +9,7 @@ export interface Track {
     name: string;
     images: { url: string }[];
   };
+  popularity?: number;
   duration_ms: number;
   uri: string;
 }

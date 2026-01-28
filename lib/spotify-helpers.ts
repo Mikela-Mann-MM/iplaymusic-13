@@ -1,5 +1,4 @@
 
-
 // Helper functions til at arbejde med Spotify API data struktur
 
 import type { Track, Artist, Album, Playlist } from './mockData';
@@ -32,7 +31,7 @@ export function getTrackAlbum(track: Track): string {
  */
 export function getTrackImage(track: Track): string {
   if (!track.album?.images || track.album.images.length === 0) {
-    return ''; // Return empty string for fallback
+    return '';
   }
   return track.album.images[0].url;
 }
@@ -85,6 +84,7 @@ export function getAlbumArtists(album: Album): string {
 
 /**
  * Format duration from milliseconds to mm:ss
+ * For Spotify API data (duration_ms)
  */
 export function formatDuration(duration_ms: number): string {
   const totalSeconds = Math.floor(duration_ms / 1000);
