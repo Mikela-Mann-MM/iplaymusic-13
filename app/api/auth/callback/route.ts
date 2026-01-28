@@ -92,28 +92,28 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(new URL('/login?error=auth_failed', request.url));
   }
 } */
+// app/api/auth/callback/route.ts
+import { NextRequest, NextResponse } from 'next/server'
 
-import { NextRequest, NextResponse } from 'next/server';
-
-const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
+const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
+const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI
 
 export async function GET(request: NextRequest) {
-  console.log('\n🔵 ===== CALLBACK STARTED =====');
+  console.log('\n🔵 ===== CALLBACK STARTED =====')
   
-  const searchParams = request.nextUrl.searchParams;
-  const code = searchParams.get('code');
-  const error = searchParams.get('error');
+  const searchParams = request.nextUrl.searchParams
+  const code = searchParams.get('code')
+  const error = searchParams.get('error')
 
   if (error) {
-    console.error('❌ Spotify auth error:', error);
-    return NextResponse.redirect(new URL('/login?error=access_denied', request.url));
+    console.error('❌ Spotify auth error:', error)
+    return NextResponse.redirect(new URL('/login?error=access_denied', request.url))
   }
 
   if (!code) {
-    console.error('❌ No code provided');
-    return NextResponse.redirect(new URL('/login?error=no_code', request.url));
+    console.error('❌ No code provided')
+    return NextResponse.redirect(new URL('/login?error=no_code', request.url))
   }
 
   try {
@@ -128,62 +128,30 @@ export async function GET(request: NextRequest) {
         redirect_uri: REDIRECT_URI!,
         grant_type: 'authorization_code'
       })
-    });
+    })
 
     if (!tokenResponse.ok) {
-      const errorData = await tokenResponse.json();
-      console.error('❌ Token exchange failed:', errorData);
-      throw new Error('Failed to exchange code for token');
+      const errorData = await tokenResponse.json()
+      console.error('❌ Token exchange failed:', errorData)
+      throw new Error('Failed to exchange code for token')
     }
 
-    const data = await tokenResponse.json();
-    console.log('✅ Token received from Spotify');
-    console.log('🔵 Token preview:', data.access_token?.substring(0, 30) + '...');
+    const data = await tokenResponse.json()
+    console.log('✅ Token received from Spotify')
 
-    // Create redirect response to onboarding
-    const redirectUrl = new URL('/onboarding', request.url);
-    const response = NextResponse.redirect(redirectUrl);
+    // ✅ Send tokens as URL parameters to auth-success
+    const authSuccessUrl = new URL('/auth-success', request.url)
+    authSuccessUrl.searchParams.set('access_token', data.access_token)
+    authSuccessUrl.searchParams.set('refresh_token', data.refresh_token)
+    authSuccessUrl.searchParams.set('expires_in', data.expires_in.toString())
 
-    // Set cookies with VERY permissive settings for development
-    const cookieSettings = {
-      httpOnly: true,
-      secure: false,  // Must be false in development (http://)
-      sameSite: 'lax' as const,
-      path: '/',
-      // NO domain property - let browser handle it
-    };
-
-    // Set access token (expires in 1 hour typically)
-    response.cookies.set('spotify_access_token', data.access_token, {
-      ...cookieSettings,
-      maxAge: data.expires_in, // Usually 3600 (1 hour)
-    });
-    console.log('✅ Set spotify_access_token cookie');
+    console.log('✅ Redirecting to auth-success with tokens')
+    console.log('🔵 ===== CALLBACK ENDED =====\n')
     
-    // Set refresh token (long-lived)
-    response.cookies.set('spotify_refresh_token', data.refresh_token, {
-      ...cookieSettings,
-      maxAge: 60 * 60 * 24 * 30, // 30 days
-    });
-    console.log('✅ Set spotify_refresh_token cookie');
-    
-    // Set login flag (client can read this one)
-    response.cookies.set('isLoggedIn', 'true', {
-      httpOnly: false, // Client needs to read this
-      secure: false,
-      sameSite: 'lax' as const,
-      path: '/',
-      maxAge: 60 * 60 * 24 * 30,
-    });
-    console.log('✅ Set isLoggedIn cookie');
-
-    console.log('✅ All cookies set, returning redirect response');
-    console.log('🔵 ===== CALLBACK ENDED =====\n');
-    
-    return response;
+    return NextResponse.redirect(authSuccessUrl)
 
   } catch (error) {
-    console.error('❌ Authentication error:', error);
-    return NextResponse.redirect(new URL('/login?error=auth_failed', request.url));
+    console.error('❌ Authentication error:', error)
+    return NextResponse.redirect(new URL('/login?error=auth_failed', request.url))
   }
 }

@@ -1,37 +1,111 @@
-'use client';
+'use client'
 
-import { ArrowLeft, Play } from 'lucide-react';
-import { useRouter, useParams } from 'next/navigation';
-import { mockAlbums, mockTracks } from '@/lib/mockData';
+import { useState, useEffect } from 'react'
+import { ArrowLeft, Play } from 'lucide-react'
+import { useRouter, useParams } from 'next/navigation'
+// import { mockAlbums, mockTracks } from '@/lib/mockData'
+import type { Album, Track } from '@/lib/mockData'
 import { 
   getTrackArtist, 
   formatDuration, 
   getAlbumImage, 
   getAlbumArtist 
-} from '@/lib/spotify-helpers';
-import BottomNav from '@/components/navigation/BottomNav';
+} from '@/lib/spotify-helpers'
+import BottomNav from '@/components/navigation/BottomNav'
 
 export default function AlbumDetailsPage() {
-  const router = useRouter();
-  const params = useParams();
-  const albumId = params.id as string;
+  const router = useRouter()
+  const params = useParams()
+  const albumId = params.id as string
   
-  // Get album (with fallback)
-  const album = mockAlbums.find(a => a.id === albumId) || mockAlbums[0];
-  
-  // Get tracks for this album
-  const tracks = mockTracks.filter(track => track.album.id === album.id);
-  
-  // Genre hashtags (you can customize these per album)
-  const genres = ['#pop', '#contemporary'];
+  const [album, setAlbum] = useState<Album | null>(null)
+  const [tracks, setTracks] = useState<Track[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchAlbumDetails() {
+      try {
+        // UNCOMMENT FOR MOCK DATA (DEVELOPMENT)
+        // const foundAlbum = mockAlbums.find(a => a.id === albumId) || mockAlbums[0]
+        // setAlbum(foundAlbum)
+        // const albumTracks = mockTracks.filter(track => track.album.id === foundAlbum.id)
+        // setTracks(albumTracks)
+        // setLoading(false)
+        // return
+        
+        // REAL SPOTIFY DATA
+        const response = await fetch(`https://api.spotify.com/v1/albums/${albumId}`)
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch album details')
+        }
+        
+        const data = await response.json()
+        setAlbum(data)
+        setTracks(data.tracks?.items || [])
+      } catch (err) {
+        console.error('Error fetching album:', err)
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+        setError(errorMessage)
+      } finally {
+        setLoading(false)
+      }
+    }
+    
+    if (albumId) {
+      fetchAlbumDetails()
+    }
+  }, [albumId])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-background-dark flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-primary-pink border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600 dark:text-gray-400">Loading album...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error || !album) {
+    return (
+      <div className="min-h-screen bg-white dark:bg-background-dark flex items-center justify-center">
+        <div className="text-center px-6">
+          <p className="text-red-500 mb-4">{error || 'Album not found'}</p>
+          <button 
+            onClick={() => router.back()}
+            className="px-6 py-3 bg-primary-pink text-white rounded-full font-semibold hover:bg-primary-pink/90 transition-colors"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Extract genres from album data (if available)
+  const genres = (album as any).genres?.slice(0, 3).map((g: string) => `#${g}`) || ['#music']
 
   return (
     <div className="min-h-screen bg-white dark:bg-background-dark pb-32">
       {/* Hero Section */}
       <div className="relative h-[60vh] overflow-hidden">
-        {/* Background with album color/gradient */}
+        {/* Background with album image or gradient */}
         <div className="absolute inset-0">
-          <div className="w-full h-full bg-linear-to-br from-blue-600 to-purple-600" />
+          {getAlbumImage(album) ? (
+            <>
+              <img 
+                src={getAlbumImage(album)} 
+                alt={album.name}
+                className="w-full h-full object-cover blur-2xl scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40" />
+            </>
+          ) : (
+            <div className="w-full h-full bg-linear-to-br from-blue-600 to-purple-600" />
+          )}
           <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/50 to-black/90" />
         </div>
 
@@ -51,14 +125,16 @@ export default function AlbumDetailsPage() {
         <div className="absolute bottom-0 left-0 right-0 p-6 z-10">
           <h1 className="text-5xl font-bold text-white mb-2">{album.name}</h1>
           <p className="text-white/90 text-lg mb-1">{getAlbumArtist(album)}</p>
-          <p className="text-white/80 mb-4">{album.total_tracks} Songs</p>
+          <p className="text-white/80 mb-4">
+            {album.release_date?.split('-')[0] || 'N/A'} • {album.total_tracks} Songs
+          </p>
           
           {/* Genre Hashtags */}
           {genres.length > 0 && (
             <div>
               <p className="text-white/80 text-sm mb-2">genre hashtags</p>
               <div className="flex gap-2 flex-wrap">
-                {genres.map((genre, i) => (
+                {genres.map((genre: string, i: number) => (
                   <span 
                     key={i} 
                     className="px-4 py-2 bg-primary-pink rounded-full text-white text-sm font-semibold hover:bg-primary-orange transition-colors cursor-pointer"
@@ -120,5 +196,5 @@ export default function AlbumDetailsPage() {
 
       <BottomNav />
     </div>
-  );
+  )
 }

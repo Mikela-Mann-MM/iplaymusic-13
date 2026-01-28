@@ -23,7 +23,7 @@ export default function TrendsPage() {
         // setLoading(false)
         // return
         
-        // ✅ REAL SPOTIFY DATA
+        // REAL SPOTIFY DATA
         const response = await fetch('/api/spotify/trends')
         if (!response.ok) {
           throw new Error('Failed to fetch trends')

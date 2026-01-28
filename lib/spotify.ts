@@ -87,109 +87,65 @@ export async function getSpotifyBatch(
   return results.flat();
 } */
 
-  import { cookies } from 'next/headers';
-
-interface FetchOptions {
-  revalidate?: number;
-  retries?: number;
-}
+// lib/spotify.ts
+import { cookies } from 'next/headers'
 
 export async function getSpotifyData(
-  endpoint: string, 
-  options: FetchOptions = { revalidate: 60, retries: 3 }
+  endpoint: string,
+  options: { revalidate?: number; retries?: number } = {}
 ) {
-  console.log('\n🔵 ===== getSpotifyData CALLED =====');
-  console.log('🔵 Endpoint:', endpoint);
-  
-  const cookieStore = await cookies();
-  
-  // List all cookies
-  const allCookies = cookieStore.getAll();
-  console.log('🔵 Total cookies found:', allCookies.length);
-  console.log('🔵 Cookie names:', allCookies.map(c => c.name));
-  
-  const token = cookieStore.get('spotify_access_token')?.value;
-  
-  console.log('🔵 spotify_access_token found:', token ? 'YES - ' + token.substring(0, 20) + '...' : 'NO');
+  console.log('\n🔵 ===== getSpotifyData CALLED =====')
+  console.log('🔵 Endpoint:', endpoint)
 
-  if (!token) {
-    console.error('❌ No access token available');
-    console.error('❌ Available cookies:', allCookies.map(c => `${c.name}=${c.value.substring(0, 10)}...`));
-    throw new Error('No access token available');
+  const { revalidate = 3600, retries = 3 } = options
+  
+  // Try to get token from cookies first (server-side)
+  let accessToken: string | undefined
+
+  try {
+    const cookieStore = await cookies()
+    const tokenCookie = cookieStore.get('spotify_access_token')
+    accessToken = tokenCookie?.value
+  } catch (error) {
+    // Cookies not available (client-side or error)
+    console.log('🔵 Cookies not available, will use client header')
   }
 
-  console.log('✅ Token found, proceeding with API call');
+  if (!accessToken) {
+    console.log('❌ No access token in cookies')
+    throw new Error('No access token available')
+  }
 
-  let lastError;
-  
-  for (let attempt = 0; attempt < (options.retries || 3); attempt++) {
+  console.log('✅ Token found, proceeding with API call')
+
+  /* // Retry logic for API calls
+  for (let attempt = 1; attempt <= retries; attempt++) {
     try {
-      console.log(`🔵 Attempt ${attempt + 1} - Calling Spotify API...`);
-      
       const response = await fetch(`https://api.spotify.com/v1${endpoint}`, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          Authorization: `Bearer ${accessToken}`,
         },
-        next: { 
-          revalidate: options.revalidate || 60
-        }
-      });
-
-      console.log('🔵 Spotify API response status:', response.status);
-
-      if (response.status === 429) {
-        const retryAfter = response.headers.get('Retry-After');
-        const waitTime = retryAfter ? parseInt(retryAfter) * 1000 : Math.pow(2, attempt) * 1000;
-        
-        console.warn(`⚠️ Rate limited. Waiting ${waitTime}ms before retry ${attempt + 1}`);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
-        continue;
-      }
-
-      if (response.status === 401) {
-        console.error('❌ Token expired (401)');
-        throw new Error('Token expired');
-      }
+        next: { revalidate },
+      })
 
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Spotify API error:', response.status, errorText);
-        throw new Error(`Spotify API error: ${response.status}`);
+        const errorText = await response.text()
+        throw new Error(`Spotify API error: ${response.status} - ${errorText}`)
       }
 
-      console.log('✅ Spotify API call successful');
-      console.log('🔵 ===== getSpotifyData ENDED =====\n');
-      return response.json();
+      const data = await response.json()
+      console.log('✅ Successfully fetched data from Spotify')
+      return data
     } catch (error) {
-      console.error('❌ Request failed:', error);
-      lastError = error;
-      
-      if (attempt < (options.retries || 3) - 1) {
-        const backoffTime = Math.pow(2, attempt) * 1000;
-        console.warn(`⚠️ Retrying in ${backoffTime}ms...`);
-        await new Promise(resolve => setTimeout(resolve, backoffTime));
+      console.error(`❌ Attempt ${attempt} failed:`, error)
+      if (attempt === retries) {
+        throw error
       }
+      // Wait before retrying
+      await new Promise((resolve) => setTimeout(resolve, 1000 * attempt))
     }
   }
 
-  throw lastError;
-}
-
-export async function getSpotifyBatch(
-  baseEndpoint: string,
-  ids: string[],
-  options?: FetchOptions
-) {
-  const chunks = [];
-  for (let i = 0; i < ids.length; i += 50) {
-    chunks.push(ids.slice(i, i + 50));
-  }
-
-  const results = await Promise.all(
-    chunks.map(chunk => 
-      getSpotifyData(`${baseEndpoint}?ids=${chunk.join(',')}`, options)
-    )
-  );
-
-  return results.flat();
-}
+  // This should never be reached due to throw in catch block
+  throw new Error('Failed to fetch data after all retries')
+} */}
