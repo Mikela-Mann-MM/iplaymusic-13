@@ -1,27 +1,38 @@
 
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getSpotifyData } from '@/lib/spotify';
 
-export async function GET(request: Request) {
+export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const ids = searchParams.get('ids');
+    console.log('Artists route called');
+
+    // Debug: se hvilke cookies der faktisk kommer ind
+    console.log('cookie names:', request.cookies.getAll().map(c => c.name));
+
+    const ids = request.nextUrl.searchParams.get('ids');
     
     if (ids) {
       const data = await getSpotifyData(
         `/artists?ids=${ids}`,
-        { revalidate: 3600, retries: 3 }
+        { 
+          cookies: request.cookies,
+          revalidate: 3600, 
+          retries: 3 }
       );
       return NextResponse.json(data);
     }
     
     const data = await getSpotifyData(
       '/me/following?type=artist&limit=50',
-      { revalidate: 600, retries: 3 }
+      { 
+        cookies: request.cookies,
+        revalidate: 600, 
+        retries: 3 }
     );
     
     return NextResponse.json(data);
+
   } catch (error) {
     console.error('Failed to fetch artists:', error);
     
@@ -35,7 +46,7 @@ export async function GET(request: Request) {
     }
     
     return NextResponse.json(
-      { error: 'Failed to fetch artists' }, 
+      { error: 'Failed to fetch artists', details: errorMessage }, 
       { status: 500 }
     );
   }
