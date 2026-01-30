@@ -1,5 +1,3 @@
-
-
 'use client'
 
 import { useState } from 'react'
@@ -40,7 +38,10 @@ export default function OnboardingPage() {
 
   return (
     <div className="min-h-screen bg-white relative overflow-hidden flex flex-col">
-      {/* Bølge baggrund */}
+      {/* Dark mode gradient overlay */}
+      <div className="hidden dark:block absolute inset-0 bg-gradient-to-br from-[rgb(255,17,104)] via-[rgb(242,45,72)] to-[rgb(255,111,51)]" />
+      
+      {/* Bølge baggrund - kun i light mode */}
       <div className="absolute top-0 left-0 right-0 h-[55vh]">
         <Image
           src="/images/wave-pattern.png"
@@ -57,10 +58,10 @@ export default function OnboardingPage() {
 
         {/* Hovedindhold */}
         <div className="flex-1 flex flex-col items-center justify-center text-center max-w-md px-4" style={{ marginBottom: '2rem' }}>
-          <h1 className="text-[1.5rem] md:text-5xl font-bold text-gray-900 whitespace-pre-line leading-tight" style={{ marginBottom: '1rem' }}>
+          <h1 className="text-[1.5rem] md:text-5xl font-bold text-gray-900 dark:text-white whitespace-pre-line leading-tight" style={{ marginBottom: '1rem' }}>
             {steps[currentStep].title}
           </h1>
-          <p className="text-gray-600 text-base leading-relaxed max-w-sm">
+          <p className="text-gray-600 dark:text-white text-base leading-relaxed max-w-sm">
             {steps[currentStep].description}
           </p>
         </div>
@@ -71,15 +72,15 @@ export default function OnboardingPage() {
             onClick={() => handleIconClick(0)}
             className={`w-[4.5rem] h-[4.5rem] rounded-full flex items-center justify-center transition-all ${
               currentStep === 0
-                ? 'bg-pink-600'
-                : 'bg-white border-[3px] border-gray-900'
+                ? 'bg-pink-600 dark:bg-white'
+                : 'bg-white dark:bg-transparent border-[3px] border-gray-900 dark:border-white'
             }`}
             aria-label="Step 1"
           >
             <Radio
               size={32}
-              className={currentStep === 0 ? 'text-white' : 'text-gray-900'}
-              strokeWidth={2.5}
+              className={currentStep === 0 ? 'text-white dark:text-pink-600' : 'text-gray-900 dark:text-white'}
+              strokeWidth={1.5}
             />
           </button>
 
@@ -87,14 +88,14 @@ export default function OnboardingPage() {
             onClick={() => handleIconClick(1)}
             className={`w-[4.5rem] h-[4.5rem] rounded-full flex items-center justify-center transition-all ${
               currentStep === 1
-                ? 'bg-pink-600'
-                : 'bg-white border-[3px] border-gray-900'
+                ? 'bg-pink-600 dark:bg-white'
+                : 'bg-white dark:bg-transparent border-[3px] border-gray-900 dark:border-white'
             }`}
             aria-label="Step 2"
           >
             <Heart
               size={30}
-              className={currentStep === 1 ? 'text-white' : 'text-gray-900'}
+              className={currentStep === 1 ? 'text-white dark:text-pink-600' : 'text-gray-900 dark:text-white'}
               strokeWidth={0}
               fill="currentColor"
             />
@@ -104,15 +105,15 @@ export default function OnboardingPage() {
             onClick={() => handleIconClick(2)}
             className={`w-[4.5rem] h-[4.5rem] rounded-full flex items-center justify-center transition-all ${
               currentStep === 2
-                ? 'bg-pink-600'
-                : 'bg-white border-[3px] border-gray-900'
+                ? 'bg-pink-600 dark:bg-white'
+                : 'bg-white dark:bg-transparent border-[3px] border-gray-900 dark:border-white'
             }`}
             aria-label="Step 3"
           >
             <Music2
               size={32}
-              className={currentStep === 2 ? 'text-white' : 'text-gray-900'}
-              strokeWidth={2.5}
+              className={currentStep === 2 ? 'text-white dark:text-pink-600' : 'text-gray-900 dark:text-white'}
+              strokeWidth={1.5}
             />
           </button>
         </div>
@@ -120,7 +121,7 @@ export default function OnboardingPage() {
         {/* Skip knap */}
         <button
           onClick={handleSkip}
-          className="text-gray-900 font-medium text-sm tracking-[0.15em] hover:text-gray-600 transition-colors pb-4 pt-12"
+          className="text-gray-900 dark:text-white font-medium text-sm tracking-[0.15em] hover:text-gray-600 dark:hover:text-gray-200 transition-colors pb-4 pt-12"
         >
           SKIP
         </button>

@@ -99,10 +99,9 @@ export default function LoginPage() {
     </div>
   );
 }
- */
-'use client'
+ */'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { User, Lock, Fingerprint } from 'lucide-react'
 
@@ -112,7 +111,7 @@ const REDIRECT_URI = process.env.NEXT_PUBLIC_REDIRECT_URI;
 // Spotify scopes - INGEN mellemrum i selve scope strengen
 const SCOPES = [
   'playlist-read-private',
-  'user-read-email', 
+  'user-read-email',
   'user-read-private',
   'user-library-read',
   'user-top-read',
@@ -124,6 +123,18 @@ export default function LoginPage() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [isDarkMode, setIsDarkMode] = useState(false)
+
+  useEffect(() => {
+    // Check if dark mode is active
+    const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    setIsDarkMode(darkModeQuery.matches)
+
+    // Listen for changes
+    const handler = (e: MediaQueryListEvent) => setIsDarkMode(e.matches)
+    darkModeQuery.addEventListener('change', handler)
+    return () => darkModeQuery.removeEventListener('change', handler)
+  }, [])
 
   // Validate environment variables
   if (!CLIENT_ID || !REDIRECT_URI) {
@@ -140,13 +151,13 @@ export default function LoginPage() {
     console.log('🔵 Login button clicked');
     console.log('🔵 CLIENT_ID:', CLIENT_ID);
     console.log('🔵 REDIRECT_URI:', REDIRECT_URI);
-    
+
     if (!CLIENT_ID) {
       setError('CLIENT_ID is not configured');
       console.error('❌ CLIENT_ID missing');
       return;
     }
-    
+
     if (!REDIRECT_URI) {
       setError('REDIRECT_URI is not configured');
       console.error('❌ REDIRECT_URI missing');
@@ -162,11 +173,11 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col p-6">
+    <div className="min-h-screen bg-background-light dark:bg-primary-pink flex flex-col p-6">
       <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
         {/* Log In Header */}
         <div style={{ marginBottom: '8rem' }}>
-          <h1 className="font-bold text-text-secondary-light dark:text-text-primary-dark" style={{ fontSize: '2.25rem', fontFamily: 'Poppins' }}>
+          <h1 className="font-bold text-text-secondary-light dark:text-white" style={{ fontSize: '2.25rem', fontFamily: 'Poppins' }}>
             Log In
           </h1>
         </div>
@@ -189,7 +200,7 @@ export default function LoginPage() {
 
         {/* Username Field */}
         <div style={{ marginBottom: '3rem' }}>
-          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark block" style={{ marginBottom: '0.5rem' }}>
+          <label className="text-lg font-semibold text-text-secondary-light dark:text-white block" style={{ marginBottom: '0.5rem' }}>
             Username
           </label>
           <div className="relative">
@@ -198,18 +209,18 @@ export default function LoginPage() {
               placeholder="Enter you username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="w-full bg-transparent border-b-2 border-text-secondary-light dark:border-text-primary-dark py-3 pr-12 text-text-secondary-light dark:text-text-primary-dark placeholder-gray-400 focus:outline-none focus:border-primary-pink transition-colors"
+              className="w-full bg-transparent border-b-2 border-text-secondary-light dark:border-white py-3 pr-12 text-text-secondary-light dark:text-white placeholder-gray-400 dark:placeholder-gray-200 focus:outline-none focus:border-primary-pink transition-colors"
             />
-            <User 
-              className="absolute right-0 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-primary-dark" 
-              size={24} 
+            <User
+              className="absolute right-0 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-white"
+              size={24}
             />
           </div>
         </div>
 
         {/* Password Field */}
         <div style={{ marginBottom: '3.5rem' }}>
-          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark block" style={{ marginBottom: '0.5rem' }}>
+          <label className="text-lg font-semibold text-text-secondary-light dark:text-white block" style={{ marginBottom: '0.5rem' }}>
             Password
           </label>
           <div className="relative">
@@ -218,11 +229,11 @@ export default function LoginPage() {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent border-b-2 border-text-secondary-light dark:border-text-primary-dark py-3 pr-12 text-text-secondary-light dark:text-text-primary-dark placeholder-gray-400 focus:outline-none focus:border-primary-pink transition-colors"
+              className="w-full bg-transparent border-b-2 border-text-secondary-light dark:border-white py-3 pr-12 text-text-secondary-light dark:text-white placeholder-gray-400 dark:placeholder-gray-200 focus:outline-none focus:border-primary-pink transition-colors"
             />
-            <Lock 
-              className="absolute right-0 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-text-primary-dark" 
-              size={24} 
+            <Lock
+              className="absolute right-0 top-1/2 -translate-y-1/2 text-text-secondary-light dark:text-white"
+              size={24}
             />
           </div>
         </div>
@@ -230,7 +241,7 @@ export default function LoginPage() {
         {/* Login Button */}
         <button
           onClick={handleLogin}
-          className="w-full py-4 border-2 border-text-secondary-light dark:border-text-primary-dark rounded-full text-text-secondary-light dark:text-text-primary-dark font-bold text-lg hover:bg-text-secondary-light hover:text-white dark:hover:bg-text-primary-dark dark:hover:text-background-dark transition-all"
+          className="w-full py-4 border-2 border-text-secondary-light dark:border-white rounded-full text-text-secondary-light dark:text-white font-bold text-lg hover:bg-text-secondary-light hover:text-white dark:hover:bg-white dark:hover:text-primary-pink transition-all"
           style={{ marginBottom: '4.5rem' }}
         >
           LOG IN
@@ -240,12 +251,21 @@ export default function LoginPage() {
         <div className="text-center">
           <button
             onClick={handleBiometricLogin}
-            className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-pink to-primary-orange flex items-center justify-center hover:shadow-2xl hover:scale-105 transition-all"
-            style={{ marginBottom: '1rem', marginLeft: 'auto', marginRight: 'auto' }}
+            className="w-24 h-24 rounded-full flex items-center justify-center hover:shadow-2xl hover:scale-105 transition-all"
+            style={{
+              marginBottom: '1rem',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              background: isDarkMode ? 'rgba(255, 255, 255, 0.2)' : 'rgb(255,17,104)'
+            }}
           >
-            <Fingerprint className="text-white" size={48} />
+            <Fingerprint
+              size={48}
+              strokeWidth={2}
+              style={{ color: 'white' }}
+            />
           </button>
-          <p className="text-text-secondary-light dark:text-text-primary-dark text-base">
+          <p className="text-text-secondary-light dark:text-white text-base">
             One-Touch Login
           </p>
         </div>
