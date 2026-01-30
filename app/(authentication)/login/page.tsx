@@ -100,7 +100,6 @@ export default function LoginPage() {
   );
 }
  */
-// app/(authentication)/login/page.tsx
 'use client'
 
 import { useState } from 'react'
@@ -163,12 +162,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col justify-between p-6">
+    <div className="min-h-screen bg-background-light dark:bg-background-dark flex flex-col p-6">
       <div className="flex-1 flex flex-col justify-center max-w-md mx-auto w-full">
         {/* Log In Header */}
-        <h1 className="text-5xl font-bold text-text-secondary-light dark:text-text-primary-dark mb-16">
-          Log In
-        </h1>
+        <div style={{ marginBottom: '8rem' }}>
+          <h1 className="font-bold text-text-secondary-light dark:text-text-primary-dark" style={{ fontSize: '2.25rem', fontFamily: 'Poppins' }}>
+            Log In
+          </h1>
+        </div>
 
         {/* Error Message */}
         {error && (
@@ -187,8 +188,8 @@ export default function LoginPage() {
         )}
 
         {/* Username Field */}
-        <div className="mb-8">
-          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark mb-2 block">
+        <div style={{ marginBottom: '3rem' }}>
+          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark block" style={{ marginBottom: '0.5rem' }}>
             Username
           </label>
           <div className="relative">
@@ -207,8 +208,8 @@ export default function LoginPage() {
         </div>
 
         {/* Password Field */}
-        <div className="mb-12">
-          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark mb-2 block">
+        <div style={{ marginBottom: '3.5rem' }}>
+          <label className="text-lg font-semibold text-text-secondary-light dark:text-text-primary-dark block" style={{ marginBottom: '0.5rem' }}>
             Password
           </label>
           <div className="relative">
@@ -229,22 +230,24 @@ export default function LoginPage() {
         {/* Login Button */}
         <button
           onClick={handleLogin}
-          className="w-full py-4 border-2 border-text-secondary-light dark:border-text-primary-dark rounded-full text-text-secondary-light dark:text-text-primary-dark font-bold text-lg hover:bg-text-secondary-light hover:text-white dark:hover:bg-text-primary-dark dark:hover:text-background-dark transition-all mb-16"
+          className="w-full py-4 border-2 border-text-secondary-light dark:border-text-primary-dark rounded-full text-text-secondary-light dark:text-text-primary-dark font-bold text-lg hover:bg-text-secondary-light hover:text-white dark:hover:bg-text-primary-dark dark:hover:text-background-dark transition-all"
+          style={{ marginBottom: '4.5rem' }}
         >
           LOG IN
         </button>
 
         {/* Biometric Login */}
         <div className="text-center">
-          <p className="text-text-secondary-light dark:text-text-primary-dark mb-6">
-            One-Touch Login
-          </p>
           <button
             onClick={handleBiometricLogin}
-            className="w-24 h-24 rounded-full bg-linear-to-br from-primary-pink to-primary-orange flex items-center justify-center mx-auto hover:shadow-2xl hover:scale-105 transition-all"
+            className="w-24 h-24 rounded-full bg-gradient-to-br from-primary-pink to-primary-orange flex items-center justify-center hover:shadow-2xl hover:scale-105 transition-all"
+            style={{ marginBottom: '1rem', marginLeft: 'auto', marginRight: 'auto' }}
           >
             <Fingerprint className="text-white" size={48} />
           </button>
+          <p className="text-text-secondary-light dark:text-text-primary-dark text-base">
+            One-Touch Login
+          </p>
         </div>
       </div>
     </div>

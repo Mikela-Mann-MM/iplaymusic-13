@@ -1,3 +1,5 @@
+
+
 'use client'
 
 import { useState } from 'react'
@@ -13,7 +15,7 @@ export default function OnboardingPage() {
   const steps = [
     {
       title: "Where Words Fail,\nMusic Speaks",
-      description: "Vivamus auctor dui dignissim, sollicitudin nunc ac, aliquam justo. Vestibulum pellentesque lacinia eleifend."
+      description: "Experience the emotional power of music that transcends language. Let every note tell your story."
     },
     {
       title: "Discover New\nMusic",
@@ -39,7 +41,7 @@ export default function OnboardingPage() {
   return (
     <div className="min-h-screen bg-white relative overflow-hidden flex flex-col">
       {/* Bølge baggrund */}
-      <div className="absolute top-0 left-0 right-0 h-[45vh]">
+      <div className="absolute top-0 left-0 right-0 h-[55vh]">
         <Image
           src="/images/wave-pattern.png"
           alt="Background pattern"
@@ -51,11 +53,11 @@ export default function OnboardingPage() {
 
       <div className="relative z-10 min-h-screen flex flex-col items-center justify-between px-8 py-12">
         {/* Tom spacer for bølgemønster */}
-        <div className="h-[35vh]" />
+        <div className="h-[53vh]" />
 
         {/* Hovedindhold */}
-        <div className="flex-1 flex flex-col items-center justify-center text-center max-w-md px-4">
-          <h1 className="text-[2.5rem] md:text-5xl font-bold text-gray-900 mb-6 whitespace-pre-line leading-tight">
+        <div className="flex-1 flex flex-col items-center justify-center text-center max-w-md px-4" style={{ marginBottom: '2rem' }}>
+          <h1 className="text-[1.5rem] md:text-5xl font-bold text-gray-900 whitespace-pre-line leading-tight" style={{ marginBottom: '1rem' }}>
             {steps[currentStep].title}
           </h1>
           <p className="text-gray-600 text-base leading-relaxed max-w-sm">
@@ -118,7 +120,7 @@ export default function OnboardingPage() {
         {/* Skip knap */}
         <button
           onClick={handleSkip}
-          className="text-gray-900 font-medium text-sm tracking-[0.15em] hover:text-gray-600 transition-colors pb-4"
+          className="text-gray-900 font-medium text-sm tracking-[0.15em] hover:text-gray-600 transition-colors pb-4 pt-12"
         >
           SKIP
         </button>
