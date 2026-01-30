@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Play } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-// import { mockPlaylists } from '@/lib/mockData';
+ import { mockPlaylists } from '@/lib/mockData';
 import type { Playlist } from '@/lib/mockData';
 import { 
   getTrackArtist, 
@@ -25,17 +25,17 @@ export default function PlaylistsPage() {
     async function fetchPlaylists() {
       try {
         // UNCOMMENT FOR MOCK DATA (DEVELOPMENT)
-        // setPlaylists(mockPlaylists)
-        // setLoading(false)
-        // return
+         setPlaylists(mockPlaylists)
+         setLoading(false)
+         return
         
         // REAL SPOTIFY DATA
-        const response = await fetch('/api/spotify/playlists');
-        if (!response.ok) {
-          throw new Error('Failed to fetch playlists');
-        }
-        const data = await response.json();
-        setPlaylists(data.items || []);
+        //const response = await fetch('/api/spotify/playlists');
+        //if (!response.ok) {
+        //  throw new Error('Failed to fetch playlists');
+        //}
+        //const data = await response.json();
+        //setPlaylists(data.items || []);
       } catch (err) {
         console.error('Error fetching playlists:', err);
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';

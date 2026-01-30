@@ -1,11 +1,13 @@
+
+
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowLeft, Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-// import { mockAlbums } from '@/lib/mockData'
+import { mockAlbums } from '@/lib/mockData'
 import type { Album } from '@/lib/mockData'
 import { getAlbumImage, getAlbumArtist } from '@/lib/spotify-helpers'
+import Navbar from '@/components/navigation/Navbar'
 import BottomNav from '@/components/navigation/BottomNav'
 
 export default function AlbumsPage() {
@@ -17,18 +19,18 @@ export default function AlbumsPage() {
   useEffect(() => {
     async function fetchAlbums() {
       try {
-        // UNCOMMENT FOR MOCK DATA (DEVELOPMENT)
-        // setAlbums(mockAlbums)
-        // setLoading(false)
-        // return
+        // MOCK DATA FOR DEVELOPMENT
+        setAlbums(mockAlbums)
+        setLoading(false)
+        return
 
-        // REAL SPOTIFY DATA
-        const response = await fetch('/api/spotify/albums')
-        if (!response.ok) {
-          throw new Error('Failed to fetch albums')
-        }
-        const data = await response.json()
-        setAlbums(data.albums?.items || [])
+        // REAL SPOTIFY DATA 
+        // const response = await fetch('/api/spotify/albums')
+        // if (!response.ok) {
+        //   throw new Error('Failed to fetch albums')
+        // }
+        // const data = await response.json()
+        // setAlbums(data.albums?.items || [])
       } catch (err) {
         console.error('Error fetching albums:', err)
         const errorMessage = err instanceof Error ? err.message : 'Unknown error'
@@ -70,21 +72,16 @@ export default function AlbumsPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-background-dark pb-32">
-      <header className="page-header flex items-center justify-between">
-        <button onClick={() => router.back()} className="p-2 text-white">
-          <ArrowLeft size={24} />
-        </button>
-        <h2 className="text-white font-semibold">ALBUMS</h2>
-        <button className="p-2 text-white">
-          <Search size={24} />
-        </button>
-      </header>
+      <Navbar mobileTitle="Albums" />
 
-      <div className="px-6 -mt-16 pb-8">
-        <h1 className="text-display font-extrabold text-white mb-8">
+      {/* Responsive padding: px-6 mobile (24px), px-8 tablet+ (32px) */}
+      <div className="px-6 sm:px-8 pt-20 pb-8">
+        {/* Page title */}
+        <h1 className="text-display font-extrabold text-gray-900 dark:text-white mb-8">
           Albums
         </h1>
 
+ {/* Page title */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {albums.map((album) => (
             <div

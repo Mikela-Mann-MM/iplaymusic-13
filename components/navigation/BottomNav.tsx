@@ -1,5 +1,3 @@
-
-
 'use client'
 
 import { Home, Mic2, Radio, Moon, Sun, Settings } from 'lucide-react'
@@ -12,18 +10,36 @@ export default function BottomNav() {
   const [darkMode, setDarkMode] = useState(false)
 
   useEffect(() => {
-    const isDark = localStorage.getItem('darkMode') === 'true'
+    // Check for saved preference, otherwise use system preference
+    const savedMode = localStorage.getItem('darkMode')
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    
+    const isDark = savedMode !== null 
+      ? savedMode === 'true' 
+      : systemPrefersDark
+
     setDarkMode(isDark)
-    if (isDark) {
-      document.documentElement.classList.add('dark')
+    document.documentElement.classList.toggle('dark', isDark)
+
+    // Listen for system theme changes
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only auto-update if user hasn't set a manual preference
+      if (localStorage.getItem('darkMode') === null) {
+        setDarkMode(e.matches)
+        document.documentElement.classList.toggle('dark', e.matches)
+      }
     }
+
+    mediaQuery.addEventListener('change', handleChange)
+    return () => mediaQuery.removeEventListener('change', handleChange)
   }, [])
 
   const toggleDarkMode = () => {
     const newMode = !darkMode
     setDarkMode(newMode)
     localStorage.setItem('darkMode', String(newMode))
-    document.documentElement.classList.toggle('dark')
+    document.documentElement.classList.toggle('dark', newMode)
   }
 
   const navItems = [
@@ -41,7 +57,7 @@ export default function BottomNav() {
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 z-50">
-      <div className="flex items-center justify-around py-4 px-6">
+      <div className="flex items-center justify-between py-4 px-4">
         {navItems.map((item, index) => {
           const Icon = item.icon
           const isActive = pathname === item.href
@@ -51,7 +67,7 @@ export default function BottomNav() {
               <button
                 key={index}
                 onClick={() => item.href && router.push(item.href)}
-                className="w-16 h-16 rounded-full bg-linear-to-br from-primary-pink to-primary-orange flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
+                className="w-16 h-16 rounded-full bg-gradient-to-br from-primary-pink to-primary-orange flex items-center justify-center shadow-lg hover:shadow-xl transition-shadow"
               >
                 <Icon className="text-white" size={28} />
               </button>

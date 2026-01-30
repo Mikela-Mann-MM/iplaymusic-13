@@ -1,4 +1,9 @@
-// Spotify API Types
+
+
+export interface NavbarProps {
+  mobileTitle?: string;
+  showMobileSearch?: boolean;
+}
 
 export interface SpotifyImage {
   url: string
