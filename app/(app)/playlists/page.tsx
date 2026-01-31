@@ -227,7 +227,7 @@ export default function PlaylistsPage() {
   );
 } */
 
-  'use client';
+'use client';
 
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Search, Play } from 'lucide-react';
@@ -306,21 +306,6 @@ export default function PlaylistsPage() {
   if (playlists.length === 0) {
     return (
       <div className="min-h-screen bg-white dark:bg-background-dark pb-32">
-        <header className="page-header flex items-center justify-between">
-          <button 
-            onClick={() => router.back()} 
-            className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-          >
-            <ArrowLeft size={24} />
-          </button>
-          <h2 className="text-white font-semibold tracking-wider">PLAYLISTS</h2>
-          <button 
-            onClick={() => router.push('/search')}
-            className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
-          >
-            <Search size={24} />
-          </button>
-        </header>
         <div className="flex items-center justify-center mt-20">
           <p className="text-gray-600 dark:text-gray-400">No playlists found</p>
         </div>
@@ -351,14 +336,16 @@ export default function PlaylistsPage() {
         </div>
 
         {/* Header Navigation */}
-        <div className="relative z-10 flex items-center justify-between px-4 pt-4">
+        <div className="relative z-10 flex items-center justify-between px-6 pt-6">
           <button 
             onClick={() => router.back()} 
             className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
           >
             <ArrowLeft size={24} />
           </button>
-          <h2 className="text-white font-semibold tracking-wider text-sm">PLAYLISTS</h2>
+          <h2 className="text-white font-semibold tracking-wider text-sm uppercase">
+            {playlist.name}
+          </h2>
           <button 
             onClick={() => router.push('/search')}
             className="p-2 text-white hover:bg-white/10 rounded-full transition-colors"
@@ -368,7 +355,7 @@ export default function PlaylistsPage() {
         </div>
 
         {/* Playlists Title */}
-        <div className="relative z-10 px-6 mt-8">
+        <div className="relative z-10 px-6 mt-12">
           <h1 className="text-5xl font-bold text-white">
             Playlists
           </h1>
@@ -389,8 +376,8 @@ export default function PlaylistsPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-purple-600 to-purple-900 flex items-center justify-center">
-                  <span className="text-xl text-white font-bold">
+                <div className="w-full h-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                  <span className="text-xl text-gray-600 dark:text-gray-300 font-bold">
                     {pl.name[0]}
                   </span>
                 </div>
@@ -400,13 +387,13 @@ export default function PlaylistsPage() {
         </div>
       </div>
 
-      <div className="px-4 mt-16">
+      <div className="px-6 mt-20">
         {/* Main Playlist Cover */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center mb-8">
           <div className="text-center">
             {/* Album Art */}
             {getPlaylistImage(playlist) ? (
-              <div className="w-64 h-64 rounded-xl mb-4 overflow-hidden shadow-2xl">
+              <div className="w-64 h-64 rounded-xl mb-6 overflow-hidden shadow-2xl">
                 <img 
                   src={getPlaylistImage(playlist)} 
                   alt={playlist.name}
@@ -414,8 +401,8 @@ export default function PlaylistsPage() {
                 />
               </div>
             ) : (
-              <div className="w-64 h-64 bg-gradient-to-br from-purple-600 to-purple-900 rounded-xl mb-4 overflow-hidden flex items-center justify-center shadow-2xl">
-                <span className="text-6xl text-white font-bold">
+              <div className="w-64 h-64 bg-gray-300 dark:bg-gray-600 rounded-xl mb-6 overflow-hidden flex items-center justify-center shadow-2xl">
+                <span className="text-6xl text-gray-600 dark:text-gray-300 font-bold">
                   {playlist.name[0]}
                 </span>
               </div>
@@ -434,12 +421,12 @@ export default function PlaylistsPage() {
         </div>
 
         {/* Track List */}
-        <div className="space-y-3 mb-8">
+        <div className="space-y-4 mb-8">
           {tracks.length > 0 ? (
             tracks.map((track, index) => (
               <div 
                 key={track.id} 
-                className="flex items-center gap-4" 
+                className="flex items-center gap-4 py-2" 
                 onClick={() => router.push('/player')}
               >
                 {/* Play Button */}
@@ -471,7 +458,7 @@ export default function PlaylistsPage() {
         </div>
 
         {/* Listen All Button */}
-        <div className="flex justify-center pb-8">
+        <div className="flex justify-center pb-6 mt-8 pt-12">
           <button 
             className="w-full max-w-md py-4 border-2 border-primary-pink rounded-full text-primary-pink font-bold text-lg hover:bg-primary-pink hover:text-white transition-all"
             onClick={() => router.push('/player')}
