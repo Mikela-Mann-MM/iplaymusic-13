@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { ArrowLeft, Search, Play, Clock } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-// import { mockTracks, mockAlbums } from '@/lib/mockData'
+import { mockTracks, mockAlbums } from '@/lib/mockData'
 import type { Track, Album } from '@/lib/mockData'
 import { getTrackImage, getTrackArtist, getAlbumImage, getAlbumArtist } from '@/lib/spotify-helpers'
 import BottomNav from '@/components/navigation/BottomNav'
@@ -42,38 +42,38 @@ export default function HomePage() {
     async function fetchFeedData() {
       try {
         // UNCOMMENT FOR MOCK DATA (DEVELOPMENT)
-        // setRecentTracks(mockTracks.slice(0, 5))
-        // setNewReleases(mockAlbums.slice(0, 3))
-        // setLoading(false)
-        // return
+         setRecentTracks(mockTracks.slice(0, 5))
+         setNewReleases(mockAlbums.slice(0, 3))
+         setLoading(false)
+         return
 
         // REAL SPOTIFY DATA - Fetch both in parallel
 
-        const token = getStoredToken()
+        //const token = getStoredToken()
 
-        if (!token) {
-          console.error('No token found')
-          router.push('/login')
-          return
-        }
+        //if (!token) {
+         // console.error('No token found')
+         // router.push('/login')
+         // return
+        //}
 
-        const headers = {
-          'Authorization': `Bearer ${token}`
-        }
-        const [recentResponse, releasesResponse] = await Promise.all([
-          fetch('/api/spotify/recently-played', { headers }),
-          fetch('/api/spotify/albums', { headers })
-        ])
+        //const headers = {
+        //  'Authorization': `Bearer ${token}`
+        //}
+        //const [recentResponse, releasesResponse] = await Promise.all([
+         // fetch('/api/spotify/recently-played', { headers }),
+         // fetch('/api/spotify/albums', { headers })
+        //])
 
-        if (!recentResponse.ok || !releasesResponse.ok) {
-          throw new Error('Failed to fetch feed data')
-        }
+        //if (!recentResponse.ok || !releasesResponse.ok) {
+        //  throw new Error('Failed to fetch feed data')
+        //}
 
-        const recentData = await recentResponse.json()
-        const releasesData = await releasesResponse.json()
+        //const recentData = await recentResponse.json()
+        //const releasesData = await releasesResponse.json()
 
-        setRecentTracks(recentData.items?.map((item: any) => item.track).slice(0, 5) || [])
-        setNewReleases(releasesData.albums?.items?.slice(0, 3) || [])
+        //setRecentTracks(recentData.items?.map((item: any) => item.track).slice(0, 5) || [])
+        //setNewReleases(releasesData.albums?.items?.slice(0, 3) || [])
       } catch (err) {
         console.error('Error fetching feed:', err)
         const errorMessage = err instanceof Error ? err.message : 'Unknown error'
