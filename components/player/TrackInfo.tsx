@@ -9,7 +9,7 @@ interface TrackInfoProps {
 export default function TrackInfo({ trackName, artistName, albumName }: TrackInfoProps) {
   return (
     <div className="text-center">
-      <h1 className="text-[2rem] font-bold text-gray-900 dark:text-white mb-2">
+      <h1 className="text-[1.75rem] font-bold text-gray-900 dark:text-white mb-2 pt-2">
         {trackName}
       </h1>
       <p className="text-xl text-gray-600 dark:text-gray-300">

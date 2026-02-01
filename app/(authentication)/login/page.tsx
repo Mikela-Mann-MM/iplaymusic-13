@@ -115,7 +115,12 @@ const SCOPES = [
   'user-read-private',
   'user-library-read',
   'user-top-read',
-  'user-follow-read'
+  'user-follow-read',
+  'playlist-read-collaborative',
+  'streaming',                      
+  'user-read-playback-state',     
+  'user-modify-playback-state',    
+  'user-read-currently-playing'
 ].join('%20'); // URL encoded space
 
 export default function LoginPage() {

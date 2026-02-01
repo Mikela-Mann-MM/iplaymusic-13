@@ -13,7 +13,6 @@ function getStoredToken(): string | null {
   return localStorage.getItem('spotify_access_token')
 }
 
-
 const hashtags = ['#spotify', '#musicworld', '#jazz', '#billboard', '#grammy', '#coachella']
 
 const events = [
@@ -48,7 +47,6 @@ export default function HomePage() {
          return
 
         // REAL SPOTIFY DATA - Fetch both in parallel
-
         //const token = getStoredToken()
 
         //if (!token) {
@@ -115,36 +113,29 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-background-dark pb-32">
-      <header className="flex items-center justify-between px-6 py-4 bg-white dark:bg-background-dark">
-        <button onClick={() => router.back()}>
-          <ArrowLeft size={24} className="text-gray-800 dark:text-white" />
-        </button>
-        <div className="w-10" />
-        <button>
-          <Search size={24} className="text-gray-800 dark:text-white" />
-        </button>
-      </header>
 
-      <div className="px-6">
-        <h1 className="text-display font-extrabold bg-linear-to-r from-primary-pink to-primary-orange bg-clip-text text-transparent mb-8">
+      {/* Main container - Max width 360px på mobil */}
+      <div className="px-3 sm:px-6 max-w-[360px] sm:max-w-none mx-auto">
+        {/* Heading */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold bg-linear-to-r from-primary-pink to-primary-orange bg-clip-text text-transparent mb-6 sm:mb-8 pt-6 pb-3">
           Your Feed
         </h1>
 
         {/* Recently Played Section */}
-        <section className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock size={24} className="text-primary-pink" />
-            <h2 className="text-2xl font-bold dark:text-white">Recently Played</h2>
+        <section className="mb-8 sm:mb-10">
+          <div className="flex items-center gap-2 mb-3 sm:mb-4 pb-2">
+            <Clock size={20} className="text-gray-500 sm:w-6 sm:h-6" />
+            <h2 className="text-xl sm:text-2xl font-bold dark:text-white">Recently Played</h2>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {recentTracks.map((track) => (
               <div
                 key={track.id}
-                className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                className="flex items-center gap-2 sm:gap-4 p-3 sm:p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-white/5 transition-colors cursor-pointer"
                 onClick={() => router.push('/player')}
               >
                 {/* Album Art */}
-                <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-lg overflow-hidden shrink-0">
                   {getTrackImage(track) ? (
                     <img
                       src={getTrackImage(track)}
@@ -152,23 +143,25 @@ export default function HomePage() {
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl">
+                    <div className="w-full h-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg sm:text-xl">
                       {track.name[0]}
                     </div>
                   )}
                 </div>
 
                 {/* Track Info */}
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold truncate dark:text-white">{track.name}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                <div className="flex-1 min-w-0 max-w-[180px] sm:max-w-none">
+                  <h3 className="text-sm sm:text-base font-semibold truncate dark:text-white">
+                    {track.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 truncate">
                     {getTrackArtist(track)}
                   </p>
                 </div>
 
                 {/* Play Button */}
-                <button className="w-10 h-10 rounded-full bg-primary-pink flex items-center justify-center hover:scale-110 transition-transform">
-                  <Play size={16} fill="white" className="text-white ml-0.5" />
+                <button className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-primary-pink flex items-center justify-center hover:scale-110 transition-transform shrink-0">
+                  <Play size={14} fill="white" className="text-white ml-0.5 sm:w-4 sm:h-4" />
                 </button>
               </div>
             ))}
@@ -176,17 +169,18 @@ export default function HomePage() {
         </section>
 
         {/* New Releases Section */}
-        <section className="mb-10">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold dark:text-white">New Releases</h2>
+        <section className="mb-8 sm:mb-10 pt-3 pb-3">
+          <div className="flex items-center justify-between mb-3 sm:mb-4">
+            <h2 className="text-xl sm:text-2xl font-bold dark:text-white pb-3">New Releases</h2>
             <button
-              className="text-primary-pink text-sm font-semibold"
+              className="text-primary-pink text-xs sm:text-sm font-semibold"
               onClick={() => router.push('/albums')}
             >
               View All
             </button>
           </div>
-          <div className="grid grid-cols-3 gap-4">
+          {/* Grid */}
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
             {newReleases.map((album) => {
               const albumUrl = '/albums/' + album.id;
 
@@ -196,7 +190,7 @@ export default function HomePage() {
                   className="cursor-pointer group"
                   onClick={() => router.push(albumUrl)}
                 >
-                  <div className="aspect-square rounded-lg overflow-hidden mb-2 group-hover:scale-105 transition-transform">
+                  <div className="aspect-square rounded-lg overflow-hidden mb-1.5 sm:mb-2 group-hover:scale-105 transition-transform">
                     {getAlbumImage(album) ? (
                       <img
                         src={getAlbumImage(album)}
@@ -204,15 +198,15 @@ export default function HomePage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-2xl">
+                      <div className="w-full h-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl sm:text-2xl">
                         {album.name[0]}
                       </div>
                     )}
                   </div>
-                  <h3 className="text-sm font-semibold truncate dark:text-white">
+                  <h3 className="text-xs sm:text-sm font-semibold truncate dark:text-white leading-tight">
                     {album.name}
                   </h3>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                  <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400 truncate">
                     {getAlbumArtist(album)}
                   </p>
                 </div>
@@ -221,16 +215,18 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Events Feed Section (Mock Data) */}
+        {/* Events Feed Section */}
         <section>
-          <h2 className="text-2xl font-bold dark:text-white mb-4">Events & Trending</h2>
+          <h2 className="text-xl sm:text-2xl font-bold dark:text-white mb-3 sm:mb-4 pt-2 pb-4">
+            Events & Trending
+          </h2>
 
-          {/* Hashtags */}
-          <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+          {/* Hashtags - Starter ikke helt ved kanten */}
+          <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-3 sm:pb-4 mb-4 sm:mb-6 scrollbar-hide -mx-1 px-1 sm:mx-0 sm:px-0">
             {hashtags.map((tag, index) => (
               <button
                 key={index}
-                className="px-6 py-3 bg-primary-pink rounded-full text-white font-semibold whitespace-nowrap hover:bg-primary-pink/90 transition-colors"
+                className="px-4 sm:px-6 py-2 sm:py-3 bg-primary-pink rounded-full text-white text-sm sm:text-base font-semibold whitespace-nowrap hover:bg-primary-pink/90 transition-colors"
               >
                 {tag}
               </button>
@@ -238,37 +234,39 @@ export default function HomePage() {
           </div>
 
           {/* Events */}
-          <div className="space-y-6">
+          <div className="space-y-8 sm:space-y-8">
             {events.map((event) => (
               <div
                 key={event.id}
                 className="rounded-2xl overflow-hidden bg-white dark:bg-background-dark shadow-lg"
               >
-                <div className="relative h-64">
+                <div className="relative h-48 sm:h-64">
                   <div className="w-full h-full bg-linear-to-br from-blue-600 to-purple-600" />
                   <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6">
-                    <div className="flex gap-2 mb-3 flex-wrap">
+                  <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                    <div className="flex gap-1.5 sm:gap-2 mb-2 sm:mb-3 flex-wrap">
                       {event.tags.map((tag, i) => (
-                        <span key={i} className="text-primary-pink text-sm font-semibold">
+                        <span key={i} className="text-primary-pink text-xs sm:text-sm font-semibold">
                           {tag}
                         </span>
                       ))}
                     </div>
-                    <div className="flex items-center gap-2 mb-3">
+                    <div className="flex items-center gap-2 mb-2 sm:mb-3">
                       <div className="flex -space-x-2">
                         {[1, 2, 3].map((i) => (
                           <div
                             key={i}
-                            className="w-8 h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-500 border-2 border-white"
+                            className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-linear-to-br from-blue-500 to-purple-500 border-2 border-white"
                           />
                         ))}
                       </div>
-                      <span className="text-white text-sm">
+                      <span className="text-white text-xs sm:text-sm">
                         <strong>{event.engagement.toLocaleString()}</strong> are talking about this
                       </span>
                     </div>
-                    <h3 className="text-white text-2xl font-bold">{event.title}</h3>
+                    <h3 className="text-white text-lg sm:text-2xl font-bold leading-tight">
+                      {event.title}
+                    </h3>
                   </div>
                 </div>
               </div>

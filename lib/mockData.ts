@@ -58,23 +58,23 @@ export const mockTracks: Track[] = [
     album: {
       id: 'album-1',
       name: 'After Hours',
-      images: [{ url: 'https://i.scdn.co/image/ab67616d0000b273ef8cf61c6f4d71b23b3b8c1c' }]
+      images: [{ url: 'https://i.scdn.co/image/ab67616d0000b2739e495fb707973f3390850eea' }]
     },
     duration_ms: 200000, // 3:20
     uri: 'spotify:track:0VjIjW4GlUZAMYd2vXMi3b'
   },
-  {
+ {
     id: '2',
     name: 'Save Your Tears',
     artists: [{ id: 'artist-1', name: 'The Weeknd' }],
     album: {
       id: 'album-1',
       name: 'After Hours',
-      images: [{ url: 'https://i.scdn.co/image/ab67616d0000b273ef8cf61c6f4d71b23b3b8c1c' }]
+      images: [{ url: 'https://i.scdn.co/image/ab67616d0000b2739e495fb707973f3390850eea' }]
     },
     duration_ms: 215000, // 3:35
     uri: 'spotify:track:5QO79kh1waicV47BqGRL3g'
-  },
+  }, 
   {
     id: '3',
     name: 'Levitating',
